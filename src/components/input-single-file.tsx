@@ -35,10 +35,14 @@ interface InputSingleFileProps
 		Omit<React.ComponentProps<"input">, "size"> {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	form: any;
+	allowedExtensions: string[];
+	maxFileSizeInMB: number;
 	error?: React.ReactNode;
 }
 
 export default function InputSingleFile({
+	allowedExtensions,
+	maxFileSizeInMB,
 	form,
 	error,
 	size,
@@ -51,9 +55,30 @@ export default function InputSingleFile({
 		() => formValues[name]?.[0],
 		[formValues, name],
 	);
+
+	const { fileExtension, fileSize } = useMemo(
+		() => ({
+			fileExtension: formFile?.name?.split(".")?.pop()?.toLowerCase() || "",
+			fileSize: formFile?.size || 0,
+		}),
+		[formFile],
+	);
+
+	function isValidExtension() {
+		return allowedExtensions.includes(fileExtension);
+	}
+
+	function isValidSize() {
+		return fileSize <= maxFileSizeInMB * 1024 * 1024;
+	}
+
+	function isValidFile() {
+		return isValidExtension() && isValidSize();
+	}
+
 	return (
 		<div>
-			{!formFile ? (
+			{!formFile || !isValidFile() ? (
 				<>
 					<div className="w-full relative group cursor-pointer">
 						<input
@@ -74,6 +99,16 @@ export default function InputSingleFile({
 							</Text>
 						</div>
 					</div>
+					{formFile && !isValidExtension() && (
+						<Text variant="label-small" className="text-accent-red">
+							Tipo de arquivo inválido
+						</Text>
+					)}
+					{formFile && !isValidSize() && (
+						<Text variant="label-small" className="text-accent-red">
+							Tamanho do arquivo não suportado
+						</Text>
+					)}
 					{error && (
 						<Text variant="label-small" className="text-accent-red">
 							Erro no campo

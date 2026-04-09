@@ -59,7 +59,12 @@ export default function App() {
 				<InputText icon={SearchIcon} placeholder="Buscar foto" />
 				<InputText placeholder="Buscar foto" />
 				<InputCheckbox variant="default" size="md" />
-				<InputSingleFile form={form} {...form.register("file")} />
+				<InputSingleFile
+					form={form}
+					allowedExtensions={["png", "jpg", "jpeg", "webp"]}
+					maxFileSizeInMB={50}
+					{...form.register("file")}
+				/>
 			</div>
 		</div>
 	);
