@@ -8,6 +8,7 @@ import Divider from "./components/divider";
 import SearchIcon from "./assets/icons/search.svg?react";
 import InputText from "./components/input-text";
 import InputCheckbox from "./components/input-checkBox";
+import InputSingleFile from "./components/input-single-file";
 
 export default function App() {
 	return (
@@ -56,6 +57,7 @@ export default function App() {
 				<InputText icon={SearchIcon} placeholder="Buscar foto" />
 				<InputText placeholder="Buscar foto" />
 				<InputCheckbox variant="default" size="md" />
+				<InputSingleFile />
 			</div>
 		</div>
 	);
