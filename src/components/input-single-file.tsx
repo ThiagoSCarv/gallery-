@@ -35,6 +35,7 @@ interface InputSingleFileProps
 		Omit<React.ComponentProps<"input">, "size"> {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	form: any;
+	replaceBy: React.ReactNode;
 	allowedExtensions: string[];
 	maxFileSizeInMB: number;
 	error?: React.ReactNode;
@@ -43,6 +44,7 @@ interface InputSingleFileProps
 export default function InputSingleFile({
 	allowedExtensions,
 	maxFileSizeInMB,
+	replaceBy,
 	form,
 	error,
 	size,
@@ -116,30 +118,33 @@ export default function InputSingleFile({
 					)}
 				</>
 			) : (
-				<div className="flex gap-3 items-center border border-solid border-border-primary mt-5 p-3 rounded">
-					<Icon svg={FileImageIcon} className="fill-white w-6 h-6" />
-					<div className="flex flex-col">
-						<div className="truncate max-w-80">
-							<Text variant="label-medium" className="text-placeholder">
-								{formFile.name}
-							</Text>
-						</div>
-						<div className="flex">
-							<button
-								type="button"
-								className={textVariants({
-									variant: "label-small",
-									className: "text-accent-red cursor-pointer hover:underline",
-								})}
-								onClick={() => {
-									form.setValue(name, undefined);
-								}}
-							>
-								Remover
-							</button>
+				<>
+					{replaceBy}
+					<div className="flex gap-3 items-center border border-solid border-border-primary mt-5 p-3 rounded">
+						<Icon svg={FileImageIcon} className="fill-white w-6 h-6" />
+						<div className="flex flex-col">
+							<div className="truncate max-w-80">
+								<Text variant="label-medium" className="text-placeholder">
+									{formFile.name}
+								</Text>
+							</div>
+							<div className="flex">
+								<button
+									type="button"
+									className={textVariants({
+										variant: "label-small",
+										className: "text-accent-red cursor-pointer hover:underline",
+									})}
+									onClick={() => {
+										form.setValue(name, undefined);
+									}}
+								>
+									Remover
+								</button>
+							</div>
 						</div>
 					</div>
-				</div>
+				</>
 			)}
 		</div>
 	);
