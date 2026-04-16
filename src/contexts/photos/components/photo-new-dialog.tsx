@@ -15,20 +15,15 @@ import InputSingleFile from "../../../components/input-single-file";
 import InputText from "../../../components/input-text";
 import Skeleton from "../../../components/skeleton";
 import Text from "../../../components/text";
-import type { Album } from "../../albums/models/album";
+import useAlbums from "../../albums/hooks/use-albums";
 
 interface PhotoNewDialogProps {
 	trigger: React.ReactNode;
 }
 
 export default function PhotoNewDialog({ trigger }: PhotoNewDialogProps) {
+	const { albums, isLoadingAlbums } = useAlbums();
 	const form = useForm();
-	const albums: Album[] = [
-		{ id: "3421", title: "Album 1" },
-		{ id: "421", title: "Album 2" },
-		{ id: "321", title: "Album 3" },
-	];
-	const isLoadingAlbum = false;
 
 	return (
 		<Dialog>
@@ -50,7 +45,7 @@ export default function PhotoNewDialog({ trigger }: PhotoNewDialogProps) {
 					<div className="space-y-3">
 						<Text variant="label-small">Selecionar Álbuns</Text>
 						<div className="flex flex-wrap gap-3">
-							{!isLoadingAlbum &&
+							{!isLoadingAlbums &&
 								albums.length > 0 &&
 								albums.map((album) => (
 									<Button
@@ -62,7 +57,7 @@ export default function PhotoNewDialog({ trigger }: PhotoNewDialogProps) {
 										{album.title}
 									</Button>
 								))}
-							{isLoadingAlbum &&
+							{isLoadingAlbums &&
 								Array.from({ length: 5 }).map((_, index) => (
 									<Skeleton
 										className="w-20 h-7"
