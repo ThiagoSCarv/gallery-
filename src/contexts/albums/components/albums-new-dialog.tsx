@@ -1,5 +1,4 @@
 import React from "react";
-import ImagePreview from "../../../components/image-preview";
 import {
 	Dialog,
 	DialogBody,
@@ -15,6 +14,7 @@ import Text from "../../../components/text";
 import type { Photo } from "../../photos/models/photo";
 import SelectCheckboxIllustration from "../../../assets/images/select-checkbox.svg?react";
 import Skeleton from "../../../components/skeleton";
+import PhotoImageSelectable from "../../photos/components/photo-image-selectable";
 
 interface AlbumNewDialogProps {
 	trigger: React.ReactNode;
@@ -75,6 +75,10 @@ export default function AlbumNewDialog({ trigger }: AlbumNewDialogProps) {
 	];
 	const isLoadingPhotos = false;
 
+	function handleTogglePhoto(selected: boolean, photoId: string) {
+		console.log(selected, photoId);
+	}
+
 	return (
 		<Dialog>
 			<DialogTrigger asChild>{trigger}</DialogTrigger>
@@ -89,11 +93,14 @@ export default function AlbumNewDialog({ trigger }: AlbumNewDialogProps) {
 						{!isLoadingPhotos && photos.length > 0 && (
 							<div className="flex flex-wrap gap-2">
 								{photos.map((photo) => (
-									<ImagePreview
+									<PhotoImageSelectable
 										key={photo.id}
 										src={`/images/${photo.imageId}`}
 										title={photo.title}
-										className="w-20 h-20 rounded"
+										imageClassName="w-20 h-20"
+										onSelectImage={(selected) =>
+											handleTogglePhoto(selected, photo.id)
+										}
 									/>
 								))}
 							</div>
@@ -103,7 +110,7 @@ export default function AlbumNewDialog({ trigger }: AlbumNewDialogProps) {
 								{Array.from({ length: 4 }).map((_, index) => (
 									<Skeleton
 										key={`albums-loading-${index}`}
-										className="w-20 h-20 rounded"
+										className="w-20 h-20 rounded-lg"
 									/>
 								))}
 							</div>
