@@ -15,65 +15,14 @@ import type { Photo } from "../../photos/models/photo";
 import SelectCheckboxIllustration from "../../../assets/images/select-checkbox.svg?react";
 import Skeleton from "../../../components/skeleton";
 import PhotoImageSelectable from "../../photos/components/photo-image-selectable";
+import usePhotos from "../../photos/hooks/usePhotos";
 
 interface AlbumNewDialogProps {
 	trigger: React.ReactNode;
 }
 
 export default function AlbumNewDialog({ trigger }: AlbumNewDialogProps) {
-	const photos: Photo[] = [
-		{
-			id: "1",
-			title: "Olá mundo",
-			imageId: "portrait-tower.png",
-			albums: [
-				{ id: "3421", title: "Album 1" },
-				{ id: "421", title: "Album 2" },
-				{ id: "321", title: "Album 3" },
-			],
-		},
-		{
-			id: "2",
-			title: "Olá mundo",
-			imageId: "portrait-tower.png",
-			albums: [
-				{ id: "3421", title: "Album 1" },
-				{ id: "421", title: "Album 2" },
-				{ id: "321", title: "Album 3" },
-			],
-		},
-		{
-			id: "3",
-			title: "Olá mundo",
-			imageId: "portrait-tower.png",
-			albums: [
-				{ id: "3421", title: "Album 1" },
-				{ id: "421", title: "Album 2" },
-				{ id: "321", title: "Album 3" },
-			],
-		},
-		{
-			id: "12",
-			title: "Olá mundo",
-			imageId: "portrait-tower.png",
-			albums: [
-				{ id: "3421", title: "Album 1" },
-				{ id: "421", title: "Album 2" },
-				{ id: "321", title: "Album 3" },
-			],
-		},
-		{
-			id: "23",
-			title: "Olá mundo",
-			imageId: "portrait-tower.png",
-			albums: [
-				{ id: "3421", title: "Album 1" },
-				{ id: "421", title: "Album 2" },
-				{ id: "321", title: "Album 3" },
-			],
-		},
-	];
-	const isLoadingPhotos = false;
+	const { photos, isLoadingPhotos } = usePhotos();
 
 	function handleTogglePhoto(selected: boolean, photoId: string) {
 		console.log(selected, photoId);
@@ -95,7 +44,7 @@ export default function AlbumNewDialog({ trigger }: AlbumNewDialogProps) {
 								{photos.map((photo) => (
 									<PhotoImageSelectable
 										key={photo.id}
-										src={`/images/${photo.imageId}`}
+										src={`${import.meta.env.VITE_IMAGES_URL}/${photo.imageId}`}
 										title={photo.title}
 										imageClassName="w-20 h-20"
 										onSelectImage={(selected) =>
