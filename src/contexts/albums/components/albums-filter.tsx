@@ -4,6 +4,7 @@ import Button from "../../../components/button";
 import type React from "react";
 import cx from "classnames";
 import Skeleton from "../../../components/skeleton";
+import usePhotos from "../../photos/hooks/usePhotos";
 
 interface AlbumsFilterProps extends React.ComponentProps<"div"> {
 	albums: Album[];
@@ -16,6 +17,8 @@ export default function AlbumsFilter({
 	className,
 	...props
 }: AlbumsFilterProps) {
+	const { filters } = usePhotos();
+
 	return (
 		<div
 			className={cx("flex items-center gap-3.5 overflow-x-auto", className)}
@@ -25,15 +28,21 @@ export default function AlbumsFilter({
 			<div className="flex gap-3">
 				{!loading ? (
 					<>
-						<Button size="sm" variant="primary" className="cursor-pointer">
+						<Button
+							size="sm"
+							variant={filters.albumId === null ? "primary" : "ghost"}
+							className="cursor-pointer"
+							onClick={() => filters.setAlbumId(null)}
+						>
 							Todos
 						</Button>
 						{albums.map((album) => (
 							<Button
 								size="sm"
 								key={album.id}
-								variant="ghost"
+								variant={filters.albumId === album.id ? "primary" : "ghost"}
 								className="cursor-pointer"
+								onClick={() => filters.setAlbumId(album.id)}
 							>
 								{album.title}
 							</Button>

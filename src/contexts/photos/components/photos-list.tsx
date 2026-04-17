@@ -2,6 +2,7 @@ import type { Photo } from "../models/photo";
 import PhotoWidget from "./photo-widget";
 import Text from "../../../components/text";
 import Skeleton from "../../../components/skeleton";
+import usePhotos from "../hooks/usePhotos";
 
 interface PhotosListProps {
 	photos: Photo[];
