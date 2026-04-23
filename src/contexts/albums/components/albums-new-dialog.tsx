@@ -16,6 +16,9 @@ import SelectCheckboxIllustration from "../../../assets/images/select-checkbox.s
 import Skeleton from "../../../components/skeleton";
 import PhotoImageSelectable from "../../photos/components/photo-image-selectable";
 import usePhotos from "../../photos/hooks/usePhotos";
+import { useForm } from "react-hook-form";
+import { albumNewFormSchema, type AlbumNewFormSchema } from "../schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 interface AlbumNewDialogProps {
 	trigger: React.ReactNode;
@@ -24,17 +27,33 @@ interface AlbumNewDialogProps {
 export default function AlbumNewDialog({ trigger }: AlbumNewDialogProps) {
 	const { photos, isLoadingPhotos } = usePhotos();
 
+	const [modalOpen, setModalOpen] = React.useState(false);
+  	const form = useForm<AlbumNewFormSchema>({
+    	resolver: zodResolver(albumNewFormSchema),
+  	});
+
 	function handleTogglePhoto(selected: boolean, photoId: string) {
 		console.log(selected, photoId);
 	}
 
+	function handleSubmit(payload: AlbumNewFormSchema) {
+    	console.log(payload);
+  	}
+
+  	React.useEffect(() => {
+    	if (!modalOpen) {
+      	form.reset();
+    	}
+  	}, [form, modalOpen]);
+
 	return (
-		<Dialog>
+		<Dialog open={modalOpen} onOpenChange={setModalOpen}>
 			<DialogTrigger asChild>{trigger}</DialogTrigger>
 			<DialogContent>
+				<form onSubmit={form.handleSubmit(handleSubmit)}>
 				<DialogHeader>Criar álbum</DialogHeader>
 				<DialogBody className="flex flex-col gap-5">
-					<InputText placeholder="Adicione um título" />
+					<InputText placeholder="Adicione um título" error={form.formState.errors.title?.message}/>
 					<div className="space-y-3">
 						<Text as="div" variant="label-small" className="mb-3">
 							Fotos cadastradas
@@ -80,6 +99,7 @@ export default function AlbumNewDialog({ trigger }: AlbumNewDialogProps) {
 					</DialogClose>
 					<Button>Criar</Button>
 				</DialogFooter>
+				</form>
 			</DialogContent>
 		</Dialog>
 	);
