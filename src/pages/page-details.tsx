@@ -13,10 +13,18 @@ import type { Photo } from "../contexts/photos/models/photo";
 export default function PagePhotoDetails() {
 	const { albums, isLoadingAlbums } = useAlbums();
 	const { id } = useParams();
-	const { photo, isLoadingPhoto, nextPhotoId, previousPhotoId } = usePhoto(id);
+	const { deletePhoto, photo, isLoadingPhoto, nextPhotoId, previousPhotoId } =
+		usePhoto(id);
+	const [isDeletingPhoto, setIsDeletingPhoto] = React.useTransition();
 
 	if (!isLoadingPhoto && !photo) {
 		return <div>Foto não encontrada</div>;
+	}
+
+	function handleDeletePhoto() {
+		setIsDeletingPhoto(async () => {
+			await deletePhoto(photo!.id);
+		});
 	}
 
 	return (
@@ -45,7 +53,13 @@ export default function PagePhotoDetails() {
 						<Skeleton className="h-[21rem]" />
 					)}
 					{!isLoadingPhoto ? (
-						<Button variant="destructive">Excluir</Button>
+						<Button
+							variant="destructive"
+							onClick={handleDeletePhoto}
+							disabled={isDeletingPhoto}
+						>
+							{isDeletingPhoto ? "Excluindo..." : "Excluir"}
+						</Button>
 					) : (
 						<Skeleton className="w-20 h-10" />
 					)}
